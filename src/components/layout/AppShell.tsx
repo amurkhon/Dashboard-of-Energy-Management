@@ -4,12 +4,16 @@ import { TopNav } from './TopNav'
 import { useEnergyStream } from '@/hooks/useEnergyStream'
 import { useSimStream } from '@/hooks/useSimStream'
 import { useDevices } from '@/hooks/useDevices'
+import { useLocalSimulation } from '@/hooks/useLocalSimulation'
 
 function AppShellInner() {
   const { data: devices } = useDevices()
   const deviceIds = devices?.map((d) => d.id) ?? []
 
-  // Mount WebSocket connections once for the whole session
+  // Browser-side simulation loop (no Celery / real devices needed)
+  useLocalSimulation()
+
+  // WebSocket connections — will take over from simulation when real devices connect
   useEnergyStream(deviceIds)
   useSimStream()
 

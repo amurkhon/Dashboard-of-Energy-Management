@@ -5,17 +5,20 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatKw(value: number): string {
+export function formatKw(value: number | null | undefined): string {
+  if (value == null) return '— kW'
   if (Math.abs(value) >= 1000) return `${(value / 1000).toFixed(1)} MW`
   return `${value.toFixed(2)} kW`
 }
 
-export function formatKwh(value: number): string {
+export function formatKwh(value: number | null | undefined): string {
+  if (value == null) return '— kWh'
   if (Math.abs(value) >= 1000) return `${(value / 1000).toFixed(1)} MWh`
   return `${value.toFixed(2)} kWh`
 }
 
-export function formatCurrency(value: number, currency = 'USD'): string {
+export function formatCurrency(value: number | null | undefined, currency = 'USD'): string {
+  if (value == null) return '—'
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,

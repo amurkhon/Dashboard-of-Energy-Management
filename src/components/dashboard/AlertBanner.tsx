@@ -2,7 +2,7 @@ import { AlertTriangle, X } from 'lucide-react'
 import { useAlertEvents, useAcknowledgeAlert } from '@/hooks/useAlerts'
 
 export function AlertBanner() {
-  const { data: alerts } = useAlertEvents({ unacknowledged: true })
+  const { data: alerts } = useAlertEvents({ acknowledged: false })
   const acknowledge = useAcknowledgeAlert()
 
   const critical = alerts?.filter((a) => a.severity === 'critical' && !a.is_acknowledged) ?? []

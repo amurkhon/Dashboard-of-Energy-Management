@@ -3,7 +3,7 @@ import type { AlertEventOut, AlertRuleOut, AlertRuleCreate } from '@/types/alert
 
 export async function getAlertEvents(params?: {
   severity?: string
-  unacknowledged?: boolean
+  acknowledged?: boolean
   limit?: number
 }): Promise<AlertEventOut[]> {
   const res = await api.get<AlertEventOut[]>('/alerts', { params })

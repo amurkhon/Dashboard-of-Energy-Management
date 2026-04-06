@@ -18,7 +18,7 @@ export interface ProductionBucket {
 export interface EfficiencyStats {
   renewable_fraction: number
   self_sufficiency_ratio: number
-  net_energy_kwh: number
+  net_kwh: number
   total_consumption_kwh: number
   total_production_kwh: number
 }

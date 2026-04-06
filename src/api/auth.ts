@@ -6,12 +6,9 @@ import type { LoginRequest, TokenResponse, UserOut, RegisterRequest } from '@/ty
 const authAxios = axios.create({ baseURL: API_BASE_URL, timeout: 10_000 })
 
 export async function login(data: LoginRequest): Promise<TokenResponse> {
-  // FastAPI OAuth2 requires form-encoded body
-  const form = new URLSearchParams()
-  form.append('username', data.username)
-  form.append('password', data.password)
-  const res = await authAxios.post<TokenResponse>('/auth/login', form, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  const res = await authAxios.post<TokenResponse>('/auth/login', {
+    email: data.email,
+    password: data.password,
   })
   return res.data
 }

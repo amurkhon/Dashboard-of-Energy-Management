@@ -54,15 +54,15 @@ export function SuggestionsPage() {
         <div className="flex flex-wrap gap-4 rounded-xl border border-green-200 bg-green-50 p-4">
           <div>
             <p className="text-xs text-green-700">Total Suggestions</p>
-            <p className="text-xl font-bold text-green-800">{summary.total_count}</p>
+            <p className="text-xl font-bold text-green-800">{summary.total_active}</p>
           </div>
           <div>
             <p className="text-xs text-green-700">Potential Savings (Energy)</p>
-            <p className="text-xl font-bold text-green-800">{formatKwh(summary.total_saving_kwh)}</p>
+            <p className="text-xl font-bold text-green-800">{formatKwh(summary.estimated_total_saving_kwh)}</p>
           </div>
           <div>
             <p className="text-xs text-green-700">Potential Savings (Cost)</p>
-            <p className="text-xl font-bold text-green-800">{formatCurrency(summary.total_saving_cost)}</p>
+            <p className="text-xl font-bold text-green-800">{formatCurrency(summary.estimated_total_saving_cost)}</p>
           </div>
         </div>
       )}
@@ -135,7 +135,9 @@ export function SuggestionsPage() {
                       {formatCurrency(s.estimated_saving_cost)}
                     </span>
                   )}
-                  <span>Confidence: {(s.confidence_score * 100).toFixed(0)}%</span>
+                  {s.confidence_score != null && (
+                    <span>Confidence: {(s.confidence_score * 100).toFixed(0)}%</span>
+                  )}
                   {s.device_name && <span>Device: {s.device_name}</span>}
                   <span>{formatRelativeTime(s.generated_at)}</span>
                 </div>

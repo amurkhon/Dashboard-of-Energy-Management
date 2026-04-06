@@ -13,10 +13,10 @@ export interface SuggestionOut {
   priority: SuggestionPriority
   title: string
   description: string
-  action_detail: Record<string, unknown>
+  action_detail: Record<string, unknown> | null
   estimated_saving_kwh: number | null
   estimated_saving_cost: number | null
-  confidence_score: number
+  confidence_score: number | null
   source: SuggestionSource
   is_dismissed: boolean
   is_applied: boolean
@@ -25,9 +25,11 @@ export interface SuggestionOut {
 }
 
 export interface SuggestionSummary {
-  total_count: number
-  total_saving_kwh: number
-  total_saving_cost: number
-  by_priority: Record<SuggestionPriority, number>
-  by_category: Record<SuggestionCategory, number>
+  total_active: number
+  critical: number
+  high: number
+  medium: number
+  low: number
+  estimated_total_saving_kwh: number
+  estimated_total_saving_cost: number
 }

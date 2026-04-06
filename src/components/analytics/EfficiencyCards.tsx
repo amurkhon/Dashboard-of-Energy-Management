@@ -6,7 +6,7 @@ export function EfficiencyCards({ stats }: { stats: EfficiencyStats }) {
   const items = [
     { label: 'Renewable Fraction', value: formatPercent(stats.renewable_fraction), color: 'text-green-600' },
     { label: 'Self-Sufficiency', value: formatPercent(stats.self_sufficiency_ratio), color: 'text-blue-600' },
-    { label: 'Net Energy', value: formatKwh(stats.net_energy_kwh), color: stats.net_energy_kwh >= 0 ? 'text-green-600' : 'text-red-500' },
+    { label: 'Net Energy', value: formatKwh(stats.net_kwh), color: stats.net_kwh >= 0 ? 'text-green-600' : 'text-red-500' },
     { label: 'Total Consumption', value: formatKwh(stats.total_consumption_kwh), color: 'text-gray-700' },
     { label: 'Total Production', value: formatKwh(stats.total_production_kwh), color: 'text-amber-600' },
   ]

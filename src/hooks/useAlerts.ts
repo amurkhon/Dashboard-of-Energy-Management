@@ -7,7 +7,7 @@ import { QK } from '@/api/queryKeys'
 import type { AlertRuleCreate, AlertSeverity } from '@/types/alert'
 import type { AlertEventOut } from '@/types/alert'
 
-export function useAlertEvents(filters?: { severity?: AlertSeverity; unacknowledged?: boolean }) {
+export function useAlertEvents(filters?: { severity?: AlertSeverity; acknowledged?: boolean }) {
   return useQuery({
     queryKey: QK.alerts(filters),
     queryFn: () => getAlertEvents(filters),

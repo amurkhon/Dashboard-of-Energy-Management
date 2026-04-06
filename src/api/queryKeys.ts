@@ -25,7 +25,7 @@ export const QK = {
 
   latestReadings: ['readings', 'latest'] as const,
 
-  alerts: (filters?: { severity?: AlertSeverity; unacknowledged?: boolean }) =>
+  alerts: (filters?: { severity?: AlertSeverity; acknowledged?: boolean }) =>
     ['alerts', filters] as const,
 
   alertRules: ['alert-rules'] as const,
@@ -37,4 +37,10 @@ export const QK = {
 
   simulationSessions: ['simulation', 'sessions'] as const,
   simulationStatus: ['simulation', 'status'] as const,
+
+  efficiencyScore: (hours: number) => ['efficiency', 'score', hours] as const,
+  deviceEfficiencyScore: (deviceId: string, hours: number) =>
+    ['efficiency', 'score', deviceId, hours] as const,
+  efficiencyHistory: (days: number, deviceId?: string) =>
+    ['efficiency', 'history', days, deviceId] as const,
 }
