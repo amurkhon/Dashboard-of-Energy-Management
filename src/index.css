@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f0fdf4;
+  --color-brand-100: #dcfce7;
+  --color-brand-500: #22c55e;
+  --color-brand-600: #16a34a;
+  --color-brand-700: #15803d;
+  --color-brand-900: #14532d;
+
+  --color-energy-solar: #f59e0b;
+  --color-energy-wind: #38bdf8;
+  --color-energy-battery: #8b5cf6;
+  --color-energy-grid: #64748b;
+
+  --animate-pulse-fast: pulse 0.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
