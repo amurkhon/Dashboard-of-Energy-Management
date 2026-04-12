@@ -27,7 +27,7 @@ export function RegisterPage() {
     try {
       await register({ full_name: form.full_name, email: form.email, password: form.password })
       // Auto-login after registration
-      const tokens = await login({ username: form.email, password: form.password })
+      const tokens = await login({ email: form.email, password: form.password })
       setTokens(tokens.access_token, tokens.refresh_token)
       navigate('/dashboard', { replace: true })
     } catch (err: unknown) {

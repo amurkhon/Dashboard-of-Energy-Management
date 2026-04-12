@@ -60,7 +60,7 @@ export function LivePowerChart() {
           width={58}
         />
         <Tooltip
-          formatter={(v: number, name: string) => [formatKw(v), name]}
+          formatter={(v, name) => [formatKw(v as number), String(name ?? '')]}
           contentStyle={{ fontSize: 11 }}
         />
         <Legend iconType="circle" wrapperStyle={{ fontSize: 11 }} />

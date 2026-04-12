@@ -9,7 +9,7 @@ import { GaugeChart } from '@/components/charts/GaugeChart'
 import { Card, CardHeader, CardBody } from '@/components/ui/Card'
 import { PageShell } from '@/components/layout/PageShell'
 import { CardSkeleton } from '@/components/ui/Skeleton'
-import { formatKw, formatKwh, formatPercent } from '@/lib/utils'
+import { formatKw, formatKwh } from '@/lib/utils'
 
 export function DashboardPage() {
   const sim = useSimStore((s) => s.current)

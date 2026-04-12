@@ -11,10 +11,12 @@ export function TopNav() {
   const [isLive, setIsLive] = useState(false)
 
   useEffect(() => {
-    if (lastPulse && Date.now() - lastPulse < 5_000) {
-      setIsLive(true)
-      const timer = setTimeout(() => setIsLive(false), 5_000)
-      return () => clearTimeout(timer)
+    if (!lastPulse || Date.now() - lastPulse >= 5_000) return
+    const timerOn = setTimeout(() => setIsLive(true), 0)
+    const timerOff = setTimeout(() => setIsLive(false), 5_000)
+    return () => {
+      clearTimeout(timerOn)
+      clearTimeout(timerOff)
     }
   }, [lastPulse])
 
