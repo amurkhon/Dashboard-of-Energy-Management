@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button'
 export function RegisterPage() {
   const navigate = useNavigate()
   const { setTokens } = useAuthStore()
-  const [form, setForm] = useState({ full_name: '', email: '', password: '', confirm: '' })
+  const [form, setForm] = useState({ full_name: '', username: '', email: '', password: '', confirm: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -25,9 +25,9 @@ export function RegisterPage() {
     setError('')
     setLoading(true)
     try {
-      await register({ full_name: form.full_name, email: form.email, password: form.password })
+      await register({ full_name: form.full_name, email: form.email, password: form.password, username: form.username || undefined })
       // Auto-login after registration
-      const tokens = await login({ email: form.email, password: form.password })
+      const tokens = await login({ identifier: form.username || form.email, password: form.password })
       setTokens(tokens.access_token, tokens.refresh_token)
       navigate('/dashboard', { replace: true })
     } catch (err: unknown) {
@@ -76,6 +76,19 @@ export function RegisterPage() {
               autoFocus
               className={inputCls}
               placeholder="Jane Smith"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              Username <span className="text-gray-400 font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              value={form.username}
+              onChange={field('username')}
+              className={inputCls}
+              placeholder="e.g. Amir"
             />
           </div>
 

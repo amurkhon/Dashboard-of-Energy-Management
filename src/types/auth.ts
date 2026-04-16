@@ -1,5 +1,5 @@
 export interface LoginRequest {
-  email: string
+  identifier: string  // email or username
   password: string
 }
 
@@ -12,7 +12,8 @@ export interface TokenResponse {
 export interface UserOut {
   id: string
   email: string
-  full_name: string
+  username: string | null
+  full_name: string | null
   role: 'admin' | 'operator' | 'viewer'
   is_active: boolean
   created_at: string
@@ -22,4 +23,5 @@ export interface RegisterRequest {
   email: string
   password: string
   full_name: string
+  username?: string
 }

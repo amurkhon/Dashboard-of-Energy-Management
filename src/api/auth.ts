@@ -7,7 +7,7 @@ const authAxios = axios.create({ baseURL: API_BASE_URL, timeout: 10_000 })
 
 export async function login(data: LoginRequest): Promise<TokenResponse> {
   const res = await authAxios.post<TokenResponse>('/auth/login', {
-    email: data.email,
+    identifier: data.identifier,
     password: data.password,
   })
   return res.data
