@@ -10,12 +10,11 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { formatRelativeTime } from '@/lib/utils'
 import type { SimSessionCreate, SimSessionStatus } from '@/types/simulation'
 
-const statusVariant: Record<SimSessionStatus, 'success' | 'warning' | 'neutral' | 'info' | 'critical'> = {
+const statusVariant: Record<SimSessionStatus, 'success' | 'warning' | 'neutral' | 'info'> = {
   running: 'success',
   paused: 'warning',
   stopped: 'neutral',
   completed: 'info',
-  error: 'critical',
 }
 
 export function SimulationPage() {
@@ -61,8 +60,8 @@ export function SimulationPage() {
                 <p className="text-sm font-bold text-gray-800">{status.session.sim_speed}x</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Ticks</p>
-                <p className="text-sm font-bold text-gray-800">{status.session.tick_count}</p>
+                <p className="text-xs text-gray-500">Tick Interval</p>
+                <p className="text-sm font-bold text-gray-800">{status.session.tick_interval_s}s</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500">Started</p>
@@ -127,7 +126,7 @@ export function SimulationPage() {
                     <div>
                       <p className="font-mono text-xs text-gray-500">{session.id.slice(0, 8)}…</p>
                       <p className="text-xs text-gray-400">
-                        {formatRelativeTime(session.started_at)} · {session.tick_count} ticks · {session.sim_speed}x speed
+                        {formatRelativeTime(session.started_at)} · {session.tick_interval_s}s interval · {session.sim_speed}x speed
                       </p>
                     </div>
                   </div>

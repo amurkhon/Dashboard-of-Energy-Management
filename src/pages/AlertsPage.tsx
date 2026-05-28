@@ -17,6 +17,10 @@ const severityVariant: Record<AlertSeverity, 'critical' | 'warning' | 'info'> = 
   info: 'info',
 }
 
+const OPERATOR_SYMBOL: Record<string, string> = {
+  gt: '>', gte: '>=', lt: '<', lte: '<=', eq: '==',
+}
+
 export function AlertsPage() {
   const { data: events, isPending: eventsPending } = useAlertEvents()
   const { data: rules, isPending: rulesPending } = useAlertRules()
@@ -107,7 +111,7 @@ export function AlertsPage() {
                   <div>
                     <p className="text-sm font-medium text-gray-800">{rule.name}</p>
                     <p className="text-xs text-gray-500">
-                      {rule.metric} {rule.operator} {rule.threshold} ·{' '}
+                      {rule.metric} {OPERATOR_SYMBOL[rule.operator] ?? rule.operator} {rule.threshold} ·{' '}
                       <Badge variant={severityVariant[rule.severity]}>{rule.severity}</Badge>
                       {' '}· cooldown {rule.cooldown_minutes}m
                     </p>

@@ -4,7 +4,13 @@ import { Button } from '@/components/ui/Button'
 import type { AlertRuleCreate, AlertMetric, AlertOperator, AlertSeverity } from '@/types/alert'
 
 const METRICS: AlertMetric[] = ['power_kw', 'energy_kwh', 'state_of_charge', 'temperature_c']
-const OPERATORS: AlertOperator[] = ['>', '<', '>=', '<=', '==']
+const OPERATORS: { value: AlertOperator; label: string }[] = [
+  { value: 'gt', label: '> (greater than)' },
+  { value: 'gte', label: '>= (greater or equal)' },
+  { value: 'lt', label: '< (less than)' },
+  { value: 'lte', label: '<= (less or equal)' },
+  { value: 'eq', label: '== (equal)' },
+]
 const SEVERITIES: AlertSeverity[] = ['info', 'warning', 'critical']
 
 interface Props {
@@ -17,7 +23,7 @@ export function AlertRuleFormModal({ open, onClose, onSubmit }: Props) {
   const [form, setForm] = useState<AlertRuleCreate>({
     name: '',
     metric: 'power_kw',
-    operator: '>',
+    operator: 'gt',
     threshold: 0,
     severity: 'warning',
     cooldown_minutes: 30,
@@ -58,7 +64,7 @@ export function AlertRuleFormModal({ open, onClose, onSubmit }: Props) {
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">Operator</label>
             <select value={form.operator} onChange={field('operator')} className={inputCls}>
-              {OPERATORS.map((o) => <option key={o} value={o}>{o}</option>)}
+              {OPERATORS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </div>
         </div>

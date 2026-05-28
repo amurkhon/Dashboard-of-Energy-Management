@@ -1,5 +1,5 @@
 export type AlertSeverity = 'info' | 'warning' | 'critical'
-export type AlertOperator = '>' | '<' | '>=' | '<=' | '=='
+export type AlertOperator = 'gt' | 'lt' | 'gte' | 'lte' | 'eq'
 export type AlertMetric = 'power_kw' | 'energy_kwh' | 'state_of_charge' | 'temperature_c'
 
 export interface AlertRuleOut {

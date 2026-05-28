@@ -1,22 +1,24 @@
-export type SimSessionStatus = 'running' | 'paused' | 'stopped' | 'completed' | 'error'
+export type SimSessionStatus = 'running' | 'paused' | 'stopped' | 'completed'
 
 export interface SimSessionOut {
   id: string
   user_id: string
+  name: string | null
   status: SimSessionStatus
+  sim_start_time: string | null
   sim_speed: number
+  tick_interval_s: number
   started_at: string
   paused_at: string | null
-  stopped_at: string | null
-  config: Record<string, unknown>
-  tick_count: number
-  current_sim_time: string | null
+  ended_at: string | null
 }
 
 export interface SimSessionCreate {
-  device_ids: string[]
+  name?: string | null
+  sim_start_time?: string | null
   sim_speed?: number
-  config?: Record<string, unknown>
+  tick_interval_s?: number
+  device_ids?: string[]
 }
 
 export interface SimStatusResponse {

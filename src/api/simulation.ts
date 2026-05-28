@@ -17,16 +17,16 @@ export async function createSimulationSession(data: SimSessionCreate): Promise<S
 }
 
 export async function pauseSession(id: string): Promise<SimSessionOut> {
-  const res = await api.put<SimSessionOut>(`/simulation/sessions/${id}/pause`)
+  const res = await api.post<SimSessionOut>(`/simulation/sessions/${id}/pause`)
   return res.data
 }
 
 export async function resumeSession(id: string): Promise<SimSessionOut> {
-  const res = await api.put<SimSessionOut>(`/simulation/sessions/${id}/resume`)
+  const res = await api.post<SimSessionOut>(`/simulation/sessions/${id}/resume`)
   return res.data
 }
 
 export async function stopSession(id: string): Promise<SimSessionOut> {
-  const res = await api.put<SimSessionOut>(`/simulation/sessions/${id}/stop`)
+  const res = await api.post<SimSessionOut>(`/simulation/sessions/${id}/stop`)
   return res.data
 }
