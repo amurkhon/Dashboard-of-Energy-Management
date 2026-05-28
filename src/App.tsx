@@ -12,6 +12,8 @@ import { DevicesPage } from '@/pages/DevicesPage'
 import { AlertsPage } from '@/pages/AlertsPage'
 import { SuggestionsPage } from '@/pages/SuggestionsPage'
 import { SimulationPage } from '@/pages/SimulationPage'
+import { InsightsPage } from '@/pages/InsightsPage'
+import { ForecastPage } from '@/pages/ForecastPage'
 
 export default function App() {
   return (
@@ -29,6 +31,8 @@ export default function App() {
               <Route path="alerts" element={<AlertsPage />} />
               <Route path="suggestions" element={<SuggestionsPage />} />
               <Route path="simulation" element={<SimulationPage />} />
+              <Route path="insights" element={<InsightsPage />} />
+              <Route path="forecast" element={<ForecastPage />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

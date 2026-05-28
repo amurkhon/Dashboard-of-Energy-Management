@@ -1,12 +1,14 @@
 import { NavLink } from 'react-router-dom'
 import {
-  LayoutDashboard, BarChart2, Cpu, Bell, Lightbulb, PlayCircle, Zap,
+  LayoutDashboard, BarChart2, Cpu, Bell, Lightbulb, PlayCircle, Zap, BrainCircuit, TrendingUp,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/analytics', label: 'Analytics', icon: BarChart2 },
+  { to: '/insights', label: 'AI Insights', icon: BrainCircuit },
+  { to: '/forecast', label: 'Forecast', icon: TrendingUp },
   { to: '/devices', label: 'Devices', icon: Cpu },
   { to: '/alerts', label: 'Alerts', icon: Bell },
   { to: '/suggestions', label: 'Suggestions', icon: Lightbulb },
