@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AlertTriangle, TrendingUp, Sun, Gauge, Clock } from 'lucide-react'
+import { AlertTriangle, TrendingUp, Sun, Gauge, Clock, Sparkles } from 'lucide-react'
 import { useInsights } from '@/hooks/useInsights'
 import { PageShell } from '@/components/layout/PageShell'
 import { Card, CardHeader, CardBody } from '@/components/ui/Card'
@@ -7,6 +7,13 @@ import { Badge } from '@/components/ui/Badge'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { formatKwh, formatCurrency, formatRelativeTime, formatPercent } from '@/lib/utils'
 import type { AnomalyRecord, DeviceForecast, LoadShiftOpportunity, DeviceEfficiency } from '@/types/insights'
+import {
+  EXAMPLE_ANOMALIES,
+  EXAMPLE_LOAD_SHIFT,
+  EXAMPLE_RENEWABLE,
+  EXAMPLE_EFFICIENCY,
+  EXAMPLE_FORECASTS,
+} from '@/lib/insightsExamples'
 
 const HOURS_OPTIONS = [
   { label: '6h', value: 6 },
@@ -55,14 +62,38 @@ export function InsightsPage() {
         <div className="space-y-4">
           {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-40" />)}
         </div>
-      ) : !data || data.device_count === 0 ? (
-        <Card>
-          <CardBody className="py-12 text-center text-sm text-gray-400">
-            No devices found. Add devices and start a simulation to see AI insights.
-          </CardBody>
-        </Card>
-      ) : (
+      ) : (() => {
+        // Fall back to hard-coded examples for any section without real data,
+        // so each insight type is demonstrated even before a simulation runs.
+        const anomaliesIsExample = !data || data.anomalies.length === 0
+        const anomalies = anomaliesIsExample ? EXAMPLE_ANOMALIES : data.anomalies
+
+        const loadShiftIsExample = !data || data.load_shifting.opportunities.length === 0
+        const loadShiftOps = loadShiftIsExample ? EXAMPLE_LOAD_SHIFT : data.load_shifting.opportunities
+        const currentRate = data?.load_shifting.current_rate_usd_kwh ?? 0.2
+        const currentHour = data?.load_shifting.current_hour ?? new Date().getHours()
+        const loadShiftSaving = loadShiftIsExample
+          ? EXAMPLE_LOAD_SHIFT.reduce((sum, o) => sum + o.estimated_saving_cost, 0)
+          : data.load_shifting.total_potential_saving_usd
+
+        const renewableIsExample = !data || data.renewable.total_consumption_kwh === 0
+        const renewable = renewableIsExample ? EXAMPLE_RENEWABLE : data.renewable
+
+        const efficiencyIsExample = !data || data.efficiency.devices.length === 0
+        const efficiency = efficiencyIsExample ? EXAMPLE_EFFICIENCY : data.efficiency
+
+        const forecastsIsExample = !data || data.forecasts.length === 0
+        const forecasts = forecastsIsExample ? EXAMPLE_FORECASTS : data.forecasts
+
+        return (
         <div className="space-y-4">
+
+          {(!data || data.device_count === 0) && (
+            <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm text-amber-700">
+              <Sparkles size={15} className="shrink-0" />
+              No devices found yet — the sections below show example insights. Add devices and start a simulation to see your own data.
+            </div>
+          )}
 
           {/* ── Anomaly Detection ── */}
           <Card>
@@ -70,17 +101,18 @@ export function InsightsPage() {
               <div className="flex items-center gap-2">
                 <AlertTriangle size={16} className="text-red-500" />
                 <h2 className="text-sm font-semibold text-gray-700">Anomaly Detection</h2>
-                <Badge variant={data.anomalies.length > 0 ? 'critical' : 'neutral'}>
-                  {data.anomalies.length} detected
+                <Badge variant={anomalies.length > 0 ? 'critical' : 'neutral'}>
+                  {anomalies.length} detected
                 </Badge>
+                {anomaliesIsExample && <ExampleTag />}
               </div>
             </CardHeader>
             <CardBody>
-              {data.anomalies.length === 0 ? (
+              {anomalies.length === 0 ? (
                 <p className="text-sm text-gray-400">No anomalies detected in this period. System is operating normally.</p>
               ) : (
                 <div className="space-y-2">
-                  {data.anomalies.map((a: AnomalyRecord) => (
+                  {anomalies.map((a: AnomalyRecord) => (
                     <div key={a.id} className="flex items-start justify-between rounded-lg border border-gray-100 bg-gray-50 p-3">
                       <div className="flex items-start gap-3">
                         <Badge variant={ANOMALY_COLOR[a.anomaly_type] as 'critical' | 'warning' | 'info'}>
@@ -109,24 +141,25 @@ export function InsightsPage() {
               <div className="flex items-center gap-2">
                 <Clock size={16} className="text-blue-500" />
                 <h2 className="text-sm font-semibold text-gray-700">Load Shifting Opportunities</h2>
-                {data.load_shifting.total_potential_saving_usd > 0 && (
+                {loadShiftSaving > 0 && (
                   <Badge variant="info">
-                    Save {formatCurrency(data.load_shifting.total_potential_saving_usd)}
+                    Save {formatCurrency(loadShiftSaving)}
                   </Badge>
                 )}
+                {loadShiftIsExample && <ExampleTag />}
               </div>
               <span className="text-xs text-gray-400">
-                Current rate: ${data.load_shifting.current_rate_usd_kwh.toFixed(2)}/kWh at {data.load_shifting.current_hour}:00
+                Current rate: ${currentRate.toFixed(2)}/kWh at {currentHour}:00
               </span>
             </CardHeader>
             <CardBody>
-              {data.load_shifting.opportunities.length === 0 ? (
+              {loadShiftOps.length === 0 ? (
                 <p className="text-sm text-gray-400">
                   No load-shifting opportunities right now — you're already in an off-peak window.
                 </p>
               ) : (
                 <div className="space-y-3">
-                  {data.load_shifting.opportunities.map((op: LoadShiftOpportunity) => (
+                  {loadShiftOps.map((op: LoadShiftOpportunity) => (
                     <div key={op.device_id} className="rounded-lg border border-blue-100 bg-blue-50 p-3">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-medium text-gray-800">{op.title}</p>
@@ -157,20 +190,21 @@ export function InsightsPage() {
                 <div className="flex items-center gap-2">
                   <Sun size={16} className="text-amber-500" />
                   <h2 className="text-sm font-semibold text-gray-700">Renewable Energy</h2>
+                  {renewableIsExample && <ExampleTag />}
                 </div>
               </CardHeader>
               <CardBody>
                 <div className="grid grid-cols-2 gap-4">
-                  <Stat label="Renewable Fraction" value={formatPercent(data.renewable.fraction)} color="text-green-600" />
-                  <Stat label="Self-Sufficiency" value={formatPercent(data.renewable.self_sufficiency)} color="text-blue-600" />
-                  <Stat label="Total Production" value={formatKwh(data.renewable.total_production_kwh)} color="text-amber-600" />
-                  <Stat label="Total Consumption" value={formatKwh(data.renewable.total_consumption_kwh)} color="text-gray-700" />
+                  <Stat label="Renewable Fraction" value={formatPercent(renewable.fraction)} color="text-green-600" />
+                  <Stat label="Self-Sufficiency" value={formatPercent(renewable.self_sufficiency)} color="text-blue-600" />
+                  <Stat label="Total Production" value={formatKwh(renewable.total_production_kwh)} color="text-amber-600" />
+                  <Stat label="Total Consumption" value={formatKwh(renewable.total_consumption_kwh)} color="text-gray-700" />
                   <Stat
                     label="Net Energy"
-                    value={formatKwh(data.renewable.net_kwh)}
-                    color={data.renewable.net_kwh >= 0 ? 'text-green-600' : 'text-red-500'}
+                    value={formatKwh(renewable.net_kwh)}
+                    color={renewable.net_kwh >= 0 ? 'text-green-600' : 'text-red-500'}
                   />
-                  <Stat label="Producing Devices" value={String(data.renewable.producing_devices)} color="text-gray-700" />
+                  <Stat label="Producing Devices" value={String(renewable.producing_devices)} color="text-gray-700" />
                 </div>
               </CardBody>
             </Card>
@@ -181,19 +215,20 @@ export function InsightsPage() {
                 <div className="flex items-center gap-2">
                   <Gauge size={16} className="text-purple-500" />
                   <h2 className="text-sm font-semibold text-gray-700">Efficiency Scores</h2>
+                  {efficiencyIsExample && <ExampleTag />}
                 </div>
-                {data.efficiency.overall_score != null && (
-                  <span className={`text-lg font-bold ${EFFICIENCY_COLOR[data.efficiency.overall_label]}`}>
-                    {Math.round(data.efficiency.overall_score)}/100
+                {efficiency.overall_score != null && (
+                  <span className={`text-lg font-bold ${EFFICIENCY_COLOR[efficiency.overall_label]}`}>
+                    {Math.round(efficiency.overall_score)}/100
                   </span>
                 )}
               </CardHeader>
               <CardBody>
-                {data.efficiency.devices.length === 0 ? (
+                {efficiency.devices.length === 0 ? (
                   <p className="text-sm text-gray-400">No readings available yet.</p>
                 ) : (
                   <div className="space-y-2">
-                    {data.efficiency.devices.map((d: DeviceEfficiency) => (
+                    {efficiency.devices.map((d: DeviceEfficiency) => (
                       <div key={d.device_id} className="flex items-center justify-between text-sm">
                         <div>
                           <span className="font-medium text-gray-800">{d.device_name}</span>
@@ -230,16 +265,17 @@ export function InsightsPage() {
               <div className="flex items-center gap-2">
                 <TrendingUp size={16} className="text-indigo-500" />
                 <h2 className="text-sm font-semibold text-gray-700">GBM Load Forecast</h2>
+                {forecastsIsExample && <ExampleTag />}
               </div>
             </CardHeader>
             <CardBody>
-              {data.forecasts.length === 0 ? (
+              {forecasts.length === 0 ? (
                 <p className="text-sm text-gray-400">
                   Forecasting requires trained models. Start a simulation to accumulate readings and train the GBM model automatically.
                 </p>
               ) : (
                 <div className="space-y-4">
-                  {data.forecasts.map((f: DeviceForecast) => (
+                  {forecasts.map((f: DeviceForecast) => (
                     <div key={f.device_id}>
                       <p className="mb-2 text-sm font-medium text-gray-700">
                         {f.device_name}
@@ -264,8 +300,17 @@ export function InsightsPage() {
           </Card>
 
         </div>
-      )}
+        )
+      })()}
     </PageShell>
+  )
+}
+
+function ExampleTag() {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700">
+      <Sparkles size={10} /> Example
+    </span>
   )
 }
 
